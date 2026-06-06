@@ -1,0 +1,11 @@
+{
+  "name": "comandasmart-static",
+  "version": "1.0.0",
+  "description": "Sistema estatico para restaurantes",
+  "scripts": {
+    "start": "npx serve ."
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}
+

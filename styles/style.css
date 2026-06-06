@@ -1,0 +1,191 @@
+/* --- VARIÁVEIS DE CORES E MEDIDAS --- */
+
+html {
+    overflow-y: scroll; /* Forces vertical scrollbar always */
+}
+:root {
+    --primary-orange: #ff6600;
+    --dark-bg: #0a0a0a;
+    --card-bg: #161616;
+    --green-btn: #28a745; /* VERDE */
+    --red-btn: #dc3545;   /* VERMELHO */
+    --blue-btn: #4169E1;  /* AZUL */
+    --side-width: 240px;
+}
+
+/* --- RESET E ESTABILIDADE --- */
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+
+body {
+    background-color: var(--dark-bg);
+    color: #fff;
+    min-height: 100vh;
+    display: block; /* Mudar para block evita o pulo da escala lateral */
+    overflow-x: hidden;
+}
+
+/* --- SIDEBAR FIXA --- */
+.sidebar {
+    width: var(--side-width);
+    height: 100vh;
+    background: linear-gradient(180deg, #1a1a1a 0%, #0d0d0d 100%);
+    position: fixed;
+    left: 0; top: 0;
+    padding: 30px 15px;
+    border-right: 1px solid #333;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Update this in style.css */
+.nav-icon { 
+    width: 60px !important; 
+    height: 60px !important; /* Force height to prevent layout shift */
+    object-fit: contain;
+    margin-bottom: 40px; 
+}
+
+
+.nav-links { width: 100%; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+.nav-links a { color: #999; text-decoration: none; padding: 12px 15px; border-radius: 10px; transition: 0.2s; font-size: 14px; width: 100%; box-sizing: border-box; }
+.nav-links a.active { background: var(--primary-orange); color: #fff; font-weight: 600; }
+
+/* --- CONTEÚDO EM TELA CHEIA --- */
+.content {
+    margin-left: var(--side-width);
+    width: calc(100% - var(--side-width));
+    padding: 40px;
+    min-height: 100vh;
+}
+
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #333;
+    padding-bottom: 20px;
+}
+
+.logo { 
+    width: 140px !important; 
+    height: 60px !important; /* Adjust based on your logo aspect ratio */
+    object-fit: contain;
+}
+
+/* --- CARDS E BOTÕES COLORIDOS --- */
+.orders-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 20px;
+}
+
+.order-card {
+    background: var(--card-bg);
+    padding: 25px;
+    border-radius: 15px;
+    border: 1px solid #333;
+    position: relative;
+}
+
+/* BOTÕES --- */
+.btn {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    text-transform: uppercase;
+    color: #fff;
+    margin-top: 5px;
+}
+
+.form-container {
+    background: var(--card-bg);
+    padding: 30px;
+    border-radius: 15px;
+    border: 1px solid #333;
+    max-width: 800px; /* Limits width so it doesn't expand infinitely */
+    margin: 0 auto;   /* Centers it if you want, or remove this to keep it left-aligned */
+}
+
+/* Forçando as cores dos botões */
+.btn-submit { background: var(--primary-orange) !important; }
+.btn-green { background: var(--green-btn) !important; }
+.btn-red { background: var(--red-btn) !important; }
+
+.obs-box { background: #222; padding: 10px; border-radius: 8px; margin: 10px 0; font-size: 0.9rem; }
+.obs-box.alert { border: 1px solid var(--red-btn); color: var(--red-btn); }
+
+.info-tag { background: #333; padding: 5px 10px; border-radius: 5px; font-size: 0.8rem; }
+
+/* --- INPUTS --- */
+input, select, textarea {
+    width: 100%; padding: 12px; background: #000; border: 1px solid #333; color: #fff; border-radius: 8px; margin-top: 10px;
+}
+
+/* ANALYTICS */
+#areaAnalytics .orders-grid { grid-template-columns: 1fr 1fr; }
+
+.btn-danger-outline { 
+    background: var(--red-btn) !important; 
+    color: #fff !important; 
+    border: none;
+}
+
+@media print {
+    /* Esconde tudo o que não é o cupom */
+    body * { 
+        visibility: hidden !important; 
+    }
+    
+    #secaoImpressao, #secaoImpressao * { 
+        visibility: visible !important; 
+    }
+    
+    #secaoImpressao {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        max-width: 80mm; /* Largura padrão de impressoras térmicas */
+        color: #000 !important;
+        background: #fff !important;
+        font-family: 'Courier New', Courier, monospace; /* Fonte monoespaçada para alinhar itens */
+        font-size: 10pt;
+        line-height: 1.2;
+        padding: 5px;
+    }
+
+    /* Remove margens da página na impressão */
+    @page {
+        margin: 0;
+    }
+
+    /* Esconde elementos desnecessários */
+    .sidebar, .btn, .main-header, .nav-links, .logo, .form-container { 
+        display: none !important; 
+    }
+}
+
+/* Espaçador para empurrar o menu administrativo para o final */
+.nav-spacer {
+    flex-grow: 1; /* Isso faz este elemento ocupar todo o espaço vazio disponível */
+}
+
+/* Garante que o container de links ocupe toda a altura disponível da sidebar */
+.nav-links {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+/* Animação para status PRONTO (piscante) */
+@keyframes piscar-pronto {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+}

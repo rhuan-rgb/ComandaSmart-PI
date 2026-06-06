@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ComandaSmart - Painel Administrativo</title>
+    <link rel="stylesheet" href="styles/style.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="sidebar">
+             <img src="images/Ativo 11@4x-8.png" class="nav-icon" alt="Menu">
+         <div class="nav-links" id="menuLateral">
+         </div>
+        </nav>
+
+        <main class="content">
+            <header class="main-header">
+                <div class="welcome-text">
+                    <h1>Painel de Controle</h1>
+                    <p id="txtStatusTurno">Verificando status do sistema...</p>
+                </div>
+                <div class="header-actions">
+                    <img src="images/Ativo 7@4x-8.png" alt="ComandaSmart logo" class="logo">
+                </div>
+            </header>
+
+            <section class="form-container" style="text-align: center;">
+                <div id="areaTurno">
+                    </div>
+            </section>
+
+            <section class="orders-section" id="areaAnalytics" style="display: none; margin-bottom: 30px;">
+                <h2 style="margin-bottom: 20px;">Resumo do Turno Atual</h2>
+                <div class="orders-grid">
+                    <div class="order-card" style="text-align: center; border-top: 4px solid var(--primary-orange);">
+                        <div class="order-header">Vendas Totais (R$)</div>
+                        <div id="vendaTotalDia" style="font-size: 2.2rem; color: var(--primary-orange); font-weight: bold; margin-top: 10px;">R$ 0,00</div>
+                    </div>
+                    <div class="order-card" style="text-align: center; border-top: 4px solid var(--green-btn);">
+                        <div class="order-header">Comandas Pagas</div>
+                        <div id="qtdPedidosDia" style="font-size: 2.2rem; color: var(--green-btn); font-weight: bold; margin-top: 10px;">0</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="orders-section">
+                <h2 style="margin-bottom: 15px;">Arquivo de Turnos Anteriores</h2>
+                <div id="listaTurnos" style="display: flex; flex-direction: column; gap: 12px;">
+                    <p style="color: #666; font-size: 0.9rem;">Carregando histórico...</p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
+
+
