@@ -1,0 +1,53 @@
+[
+  {
+    "id": 1201,
+    "mesa": "4",
+    "total": 45.95,
+    "status": "preparando",
+    "itens": "1x X-Montanha\n1x Pespi 250ml\n1x Coac Cloa",
+    "obs": "Sem cebola",
+    "garcom": "Admin",
+    "hora": "13:16"
+  },
+  {
+    "id": 1202,
+    "mesa": "6",
+    "total": 117.31,
+    "status": "em_preparacao",
+    "itens": "1x X-Montanha\n1x Coac Cloa\n1x Porcao do Juan",
+    "obs": "Caprichar no molho",
+    "garcom": "Admin",
+    "hora": "13:49"
+  },
+  {
+    "id": 1203,
+    "mesa": "8",
+    "total": 35.78,
+    "status": "pronto",
+    "itens": "1x X-Ratao",
+    "obs": "",
+    "garcom": "Admin",
+    "hora": "14:05"
+  },
+  {
+    "id": 1204,
+    "mesa": "5",
+    "total": 34.5,
+    "status": "pagamento",
+    "itens": "1x X-Montanha",
+    "obs": "",
+    "garcom": "Admin",
+    "hora": "14:12"
+  },
+  {
+    "id": 1205,
+    "mesa": "2",
+    "total": 78.25,
+    "status": "entregue",
+    "itens": "1x Porcao do Juan",
+    "obs": "",
+    "garcom": "Admin",
+    "hora": "14:20",
+    "meioPagamento": "pix"
+  }
+]

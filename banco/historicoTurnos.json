@@ -1,0 +1,80 @@
+[
+  {
+    "id": 1773508453289,
+    "nome": "TURNO DIURNO",
+    "data": "14/03/2026",
+    "abertura": "14/03/2026, 14:06:11",
+    "fechamento": "14/03/2026, 14:14:13",
+    "vendas": "117.31",
+    "qtd": 1,
+    "detalhesPedidos": [
+      {
+        "mesa": "6",
+        "itens": "1x X-Montanha\n1x Coac Cloa\n1x Porção do Juan",
+        "total": 117.31,
+        "hora": "14:13"
+      }
+    ]
+  },
+  {
+    "id": 1773507141470,
+    "nome": "TURNO DIURNO",
+    "data": "14/03/2026",
+    "abertura": "14/03/2026, 13:52:06",
+    "fechamento": "14/03/2026, 13:52:21",
+    "vendas": "34.50",
+    "qtd": 1,
+    "detalhesPedidos": [
+      {
+        "mesa": "5",
+        "itens": "1x X-Montanha",
+        "total": 34.5,
+        "hora": "13:52"
+      }
+    ]
+  },
+  {
+    "id": 1773507012249,
+    "nome": "TURNO DIURNO",
+    "data": "14/03/2026",
+    "abertura": "14/03/2026, 13:41:09",
+    "fechamento": "14/03/2026, 13:50:12",
+    "vendas": "0.00",
+    "qtd": 0,
+    "detalhesPedidos": []
+  },
+  {
+    "id": 1773507005784,
+    "nome": "TURNO DIURNO",
+    "data": "14/03/2026",
+    "abertura": "14/03/2026, 13:41:09",
+    "fechamento": "14/03/2026, 13:50:05",
+    "vendas": "77.17",
+    "qtd": 1,
+    "detalhesPedidos": [
+      {
+        "mesa": "06",
+        "itens": "1x X-Montanha\n1x X-Ratao\n1x Pespi 250ml",
+        "total": 77.17,
+        "hora": "13:49"
+      }
+    ]
+  },
+  {
+    "id": 1773505017937,
+    "nome": "TURNO DIURNO",
+    "data": "14/03/2026",
+    "abertura": "14/03/2026, 13:00:27",
+    "fechamento": "14/03/2026, 13:16:57",
+    "vendas": "45.95",
+    "qtd": 1,
+    "detalhesPedidos": [
+      {
+        "mesa": "4",
+        "itens": "1x X-Montanha\n1x Pespi 250ml\n1x Coac Cloa",
+        "total": 45.95,
+        "hora": "13:16"
+      }
+    ]
+  }
+]

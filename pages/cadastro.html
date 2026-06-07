@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>ComandaSmart - Novo Pedido</title>
+    <link rel="stylesheet" href="../styles/style.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="sidebar">
+             <img src="../images/Ativo 11@4x-8.png" class="nav-icon" alt="Menu">
+         <div class="nav-links" id="menuLateral">
+         </div>
+        </nav>
+        <main class="content">
+            <header class="main-header">
+                <div class="welcome-text"><h1>Lançar Pedido</h1><p>Monte a comanda da mesa.</p></div>
+                <img src="../images/Ativo 7@4x-8.png" class="logo">
+            </header>
+            <div class="form-container">
+                <form id="formPedido">
+                    <label>Mesa</label>
+                    <input type="number" id="mesa" required placeholder="Ex: 05">
+                    
+                    <label>Produto</label>
+                    <div style="display: flex; gap: 10px;">
+                        <select id="selectProduto" style="flex: 3;"></select>
+                        <input type="number" id="qtd" value="1" min="1" style="flex: 1;">
+                        <button type="button" id="btnAddItem" class="btn btn-submit" style="width: 50px;">+</button>
+                    </div>
+                    <br>
+                    <div id="infoPrecoItem" style="font-size: 0.8rem; color: var(--primary-orange); margin: -10px 0 15px;">Preço: R$ 0,00</div>
+
+                    <label>Itens Adicionados:</label>
+                    <div id="listaTemporaria" style="background: var(--input-bg); padding: 15px; border-radius: 10px; margin-bottom: 20px; border: 1px dashed #444;"></div>
+
+                    <label>Observações:</label>
+                    <input type="text" id="obs">
+                    <div style="background: #000; padding: 15px; border-radius: 10px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--primary-orange);">
+                    <span>TOTAL:</span>
+                    <span id="totalComanda" style="font-size: 1.5rem; color: var(--primary-orange); font-weight: bold;">R$ 0,00</span>
+                    </div>
+                    <button type="submit" class="btn btn-submit">Finalizar e Lançar</button>
+                </form>
+            </div>
+        </main>
+    </div>
+    <script src="../js/script.js"></script>
+</body>
+</html>
+
+
