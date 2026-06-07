@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>ComandaSmart - Configurações</title>
+    <link rel="stylesheet" href="../styles/style.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="sidebar">
+            <img src="../images/Ativo 11@4x-8.png" class="nav-icon" id="logoSidebar">
+            <div class="nav-links" id="menuLateral"></div>
+        </nav>
+        
+        <main class="content">
+
+            <header class="main-header">
+                <div class="welcome-text">
+                    <h1 id="tituloAdmin">Configurações</h1>
+                    <p>Ajustes de Identidade, Segurança e Dados.</p>
+                </div>
+                <button class="btn btn-red" style="width: auto;" onclick="encerrarSessaoAdmin()">Finalizar e Sair</button>
+            </header>
+
+            <section class="form-container">
+    <h3>Identidade & Segurança</h3>
+    <label>Nome do Estabelecimento</label>
+    <input type="text" id="cfgNomeRestaurante">
+    
+    <!-- NOVO CAMPO: MODO DA COZINHA -->
+    <label>Exibição do Monitor da Cozinha</label>
+    <select id="cfgModoCozinha">
+        <option value="exclusivo">Exclusivo (Acessível apenas via Link/IP)</option>
+        <option value="geral">Geral (Visível no Menu Lateral)</option>
+    </select>
+
+    <label>Nova Senha</label>
+    <input type="password" id="cfgNovaSenha" placeholder="Deixe em branco para manter">
+    
+    <label style="display: flex; align-items: center; gap: 10px; margin-top: 15px; cursor: pointer;">
+        <input type="checkbox" id="cfgImpressoraDesabilitada" style="width: 20px; height: 20px; cursor: pointer;">
+        <span>Desabilitar Impressora</span>
+    </label>
+    
+    <button class="btn btn-submit" onclick="salvarConfiguracoes()">Salvar Alterações</button>
+</section>
+<br>
+            <section class="form-container">
+             <h3>Gestão de Colaboradores (Garçons)</h3>
+             <form id="formGarcom" style="display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end;">
+               <div style="flex: 2;">
+            <label>Nome do Garçom</label>
+            <input type="text" id="nomeGarcom" placeholder="Ex: João Silva" required>
+           </div>
+           <div style="flex: 1;">
+            <label>Chave de Acesso (PIN)</label>
+            <input type="password" id="pinGarcom" maxlength="4" placeholder="4 dígitos" required>
+           </div>
+           <button type="submit" class="btn btn-submit" style="width: auto; padding: 12px 25px;">ADICIONAR</button>
+           </form>
+           <div id="listaGarçons" style="margin-top: 20px;"></div>
+            </section>
+
+            <br>
+
+            <section class="form-container">
+                <h3>Backup do Catálogo</h3>
+                <div style="display: flex; gap: 10px; margin-top: 10px;">
+                    <button class="btn" style="background: #444;" onclick="exportarCatalogo()">💾 Exportar .json</button>
+                    <label for="inputImport" class="btn" style="background: #666; cursor: pointer; text-align: center; line-height: 2.5;">📂 Importar .json</label>
+                    <input type="file" id="inputImport" accept=".json" style="display: none;" onchange="importarCatalogo(event)">
+                </div>
+            </section>
+            <!-- Dentro do <main class="content"> da admin.html -->
+<br>
+            <section class="form-container">
+    <h3>Gerenciar Catálogo de Produtos</h3>
+    <form id="formCatalogo">
+        <div style="display: flex; gap: 10px; flex-wrap: wrap; align-items: flex-end;">
+            <div style="flex: 1; min-width: 120px;">
+                <label>Categoria</label>
+                <select id="catCategoria">
+                    <option value="Lanches">Lanches</option>
+                    <option value="Bebidas">Bebidas</option>
+                    <option value="Porções">Porções</option>
+                    <option value="Sobremesas">Sobremesas</option>
+                </select>
+            </div>
+            <div style="flex: 2; min-width: 200px;">
+                <label>Nome do Produto</label>
+                <input type="text" id="catNome" placeholder="Ex: X-Salada Especial" required>
+            </div>
+            <div style="flex: 1; min-width: 100px;">
+                <label>Preço (R$)</label>
+                <input type="text" id="catPreco" placeholder="0,00" required>
+            </div>
+        </div>
+        <div style="margin-top: 10px;">
+            <label>Descrição (Apenas para Cardápio Digital)</label>
+            <input type="text" id="catDescricao" placeholder="Ex: Pão, queijo, carne suína, tomate e alface fresca" style="width: 100%;">
+        </div>
+        <button type="submit" class="btn btn-submit" style="margin-top: 20px;">ADICIONAR AO CATÁLOGO</button>
+    </form>
+    
+    <div id="listaCatalogo" style="margin-top: 30px; border-top: 1px solid #333; padding-top: 20px;">
+        <!-- Lista de produtos aparecerá aqui -->
+    </div>
+</section>
+<br>
+    <section class="form-container" style="border: 1px solid #dc3545;">
+            <h3 style="color: #dc3545;">Zona de Perigo</h3>
+              <div style="display: flex; gap: 10px; margin-top: 10px;">
+                    <button class="btn btn-red" onclick="resetarHistoricoTurnos()">Limpar Histórico de Turnos</button>
+                    <button class="btn btn-red" onclick="resetarCatalogoInteiro()">Zerar Catálogo</button>
+              </div>
+    </section>
+        </main>
+    </div>
+    <script src="../js/script.js"></script>
+</body>
+</html>
+
+

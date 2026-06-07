@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disponibilidade de Produtos - ComandaSmart</title>
+    <link rel="stylesheet" href="../styles/style.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="sidebar">
+            <img src="../images/Ativo 11@4x-8.png" class="nav-icon" alt="Menu">
+            <div class="nav-links" id="menuLateral"></div>
+        </nav>
+
+        <main class="content">
+            <header class="main-header">
+                <div class="welcome-text">
+                    <h1>Disponibilidade</h1>
+                    <p>Marque rapidamente um item como temporariamente indisponível.</p>
+                </div>
+                <button class="btn btn-green" onclick="recarregarLista()">Recarregar</button>
+            </header>
+
+            <section class="form-container">
+                <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+                    <input type="text" id="filtroNome" placeholder="🔍 Filtrar por nome..." style="flex: 1; padding: 15px; font-size: 1.1rem; background: #000; border: 2px solid #ff6600; border-radius: 8px; color: #fff;">
+                    <select id="filtroCategoria" style="padding: 15px; font-size: 1.1rem; background: #000; border: 2px solid #333; border-radius: 8px; color: #fff; min-width: 200px;">
+                        <option value="">Todas as Categorias</option>
+                        <option value="Bebidas">Bebidas</option>
+                        <option value="Lanches">Lanches</option>
+                        <option value="Porções">Porções</option>
+                        <option value="Sobremesas">Sobremesas</option>
+                    </select>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 15px;" id="listaProdutos">
+                    <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #666;">Carregando produtos...</div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="../js/script.js"></script>
+    <script>
+        let todosProdutos = [];
+
+        async function carregarProdutos() {
+            const cat = await getDB('catalogo');
+            todosProdutos = cat;
+            renderizarProdutos();
+            configurarFiltros();
+        }
+
+        function renderizarProdutos(produtosFiltrados = null) {
+            const lista = document.getElementById('listaProdutos');
+            const produtos = produtosFiltrados || todosProdutos;
+
+            if (produtos.length === 0) {
+                lista.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #666;">Nenhum produto encontrado.</div>';
+                return;
+            }
+
+            lista.innerHTML = produtos.map(p => `
+                <div style="background: #161616; border: 1px solid #333; border-radius: 12px; padding: 20px; display: flex; flex-direction: column; gap: 12px;">
+                    <div>
+                        <div style="font-size: 1.3rem; font-weight: bold; color: #fff; margin-bottom: 5px;">${p.nome}</div>
+                        <div style="font-size: 0.9rem; color: #888;">${p.categoria} • R$ ${p.preco.toFixed(2)}</div>
+                        ${p.descricao ? `<div style="font-size: 0.85rem; color: #999; margin-top: 8px; font-style: italic;">${p.descricao}</div>` : ''}
+                    </div>
+                    
+                    <button class="btn ${p.indisponivel ? 'btn-red' : 'btn-green'}" style="height: 50px; font-size: 1rem;" onclick="toggleProduto('${p.id}')">
+                        ${p.indisponivel ? '❌ INDISPONÍVEL' : '✅ DISPONÍVEL'}
+                    </button>
+                </div>
+            `).join('');
+        }
+
+        function configurarFiltros() {
+            const inputNome = document.getElementById('filtroNome');
+            const selectCategoria = document.getElementById('filtroCategoria');
+
+            inputNome.oninput = aplicarFiltros;
+            selectCategoria.onchange = aplicarFiltros;
+        }
+
+        function aplicarFiltros() {
+            const nome = document.getElementById('filtroNome').value.toLowerCase();
+            const categoria = document.getElementById('filtroCategoria').value;
+
+            const filtrados = todosProdutos.filter(p => {
+                const matchNome = p.nome.toLowerCase().includes(nome);
+                const matchCategoria = categoria === '' || p.categoria === categoria;
+                return matchNome && matchCategoria;
+            });
+
+            renderizarProdutos(filtrados);
+        }
+
+        async function toggleProduto(id) {
+            await toggleIndisponivel(id);
+            await carregarProdutos();
+        }
+
+        function recarregarLista() {
+            carregarProdutos();
+        }
+
+        window.addEventListener('load', carregarProdutos);
+
+</body>
+</html>
+
+

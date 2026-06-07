@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1773467000191,
+    "categoria": "Lanches",
+    "nome": "X-Montanha",
+    "preco": 34.5
+  },
+  {
+    "id": 1773468059947,
+    "categoria": "Porções",
+    "nome": "Porção do Juan",
+    "preco": 78.25
+  },
+  {
+    "id": 1773497414769,
+    "categoria": "Lanches",
+    "nome": "X-Ratao",
+    "preco": 35.78
+  },
+  {
+    "id": 1773498422928,
+    "categoria": "Bebidas",
+    "nome": "Pespi 250ml",
+    "preco": 6.89
+  },
+  {
+    "id": 1773498441752,
+    "categoria": "Bebidas",
+    "nome": "Coac Cloa",
+    "preco": 4.56
+  }
+]
