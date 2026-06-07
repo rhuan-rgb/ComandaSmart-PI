@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ComandaSmart - Ajuda e Conexão</title>
+    <link rel="stylesheet" href="../styles/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <nav class="sidebar">
+            <img src="../images/Ativo 11@4x-8.png" class="nav-icon" alt="Menu">
+            <div class="nav-links" id="menuLateral"></div>
+        </nav>
+
+        <main class="content">
+            <header class="main-header">
+                <div class="welcome-text">
+                    <button onclick="window.location.href='../index.html'" style="background: var(--red-btn); color: white; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; margin-bottom: 10px;">← Voltar ao Painel</button>
+                    <h1>Central de Ajuda</h1>
+                    <p>Informações de conexão e rede local.</p>
+                </div>
+                <img src="../images/Ativo 7@4x-8.png" class="logo">
+            </header>
+
+            <section class="form-container">
+                <h3 style="color: var(--primary-orange); margin-bottom: 20px;">🔗 Links de Acesso</h3>
+                
+                <div style="display: flex; gap: 30px; align-items: flex-start;">
+                    <div style="flex: 1;">
+                        <label>Acesso dos Garçons (Celular)</label>
+                        <div id="link-mobile" style="background:#000; padding:15px; border-radius:8px; border:1px solid #333; color:var(--primary-orange); font-family:monospace; margin-bottom:20px;">Carregando...</div>
+                    </div>
+                    <div style="display: flex; flex-direction: column; align-items: center; padding-top: 10px;">
+                        <label style="margin-bottom: 10px;">QR Code - Garçom</label>
+                        <div id="qrcode-mobile" style="background: white; padding: 10px; border-radius: 8px; border: 2px solid var(--primary-orange);"></div>
+                    </div>
+                </div>
+
+                <label style="margin-top: 20px;">Monitor da Cozinha (TV/Tablet)</label>
+                <div id="link-kitchen" style="background:#000; padding:15px; border-radius:8px; border:1px solid #333; color:var(--primary-orange); font-family:monospace; margin-bottom:20px;">Carregando...</div>
+                
+                <label style="margin-top: 20px;">Cardápio Digital (TV para Clientes)</label>
+                <div id="link-cardapio" style="background:#000; padding:15px; border-radius:8px; border:1px solid #333; color:var(--primary-orange); font-family:monospace; margin-bottom:20px;">Carregando...</div>
+                
+                <p style="font-size: 0.8rem; color: #666;">Nota: Todos os aparelhos devem estar conectados no mesmo Wi-Fi deste computador.</p>
+            </section>
+
+            <section class="form-container" style="margin-top: 20px;">
+                <h3 style="color: #fff; margin-bottom: 15px;">🛡️ Liberação de Rede (Firewall)</h3>
+                <p>Se os aparelhos não conectarem, execute este comando no <b>PowerShell (como Administrador)</b>:</p>
+                <code style="display:block; background:#000; color:#00ff00; padding:15px; border-radius:8px; margin-top:10px; font-size:0.9rem; border:1px solid #222;">
+                    New-NetFirewallRule -DisplayName "ComandaSmart" -Direction Inbound -LocalPort 3000 -Protocol TCP -Action Allow
+                </code>
+            </section>
+
+            <section class="form-container" style="margin-top: 20px;">
+                <h3 style="color: var(--primary-orange); margin-bottom: 15px;">📺 Gerenciamento do Cardápio Digital</h3>
+                <p style="margin-bottom: 10px;"><b>Como funciona:</b></p>
+                <ul style="margin-left: 20px; color: #ccc; font-size: 0.95rem; line-height: 1.6;">
+                    <li>O cardápio digital é exibido em uma TV na área de atendimento</li>
+                    <li>Todos os produtos com descrição aparecem automaticamente no cardápio</li>
+                    <li>Produtos marcados como "Indisponível" desaparecem do cardápio e não aparecem na aba de pedidos</li>
+                    <li>O cardápio atualiza automaticamente a cada 10 segundos</li>
+                </ul>
+                <p style="margin-top: 15px; margin-bottom: 10px;"><b>Como gerenciar:</b></p>
+                <ul style="margin-left: 20px; color: #ccc; font-size: 0.95rem; line-height: 1.6;">
+                    <li>Acesse <b>Configuração → Gerenciar Catálogo de Produtos</b></li>
+                    <li>Adicione uma <b>Descrição</b> para cada produto (essa descrição aparecerá apenas no cardápio de TV)</li>
+                    <li>Use o botão <b>✗ Marcar Indis.</b> para remover um produto do cardápio e dos pedidos</li>
+                    <li>Use o botão <b>✓ Disponível</b> para reabilitar um produto marcado como indisponível</li>
+                </ul>
+            </section>
+        </main>
+    </div>
+
+    <script src="../js/script.js"></script>
+    <script>
+        async function carregarLinksAjuda() {
+            const mobileUrl = 'mobile.html';
+            const kitchenUrl = 'kitchen.html';
+            const cardapioUrl = 'cardapiotv.html';
+            const qrcodeContainer = document.getElementById('qrcode-mobile');
+
+            document.getElementById('link-mobile').innerText = mobileUrl;
+            document.getElementById('link-kitchen').innerText = kitchenUrl;
+            document.getElementById('link-cardapio').innerText = cardapioUrl;
+
+            if (typeof QRCode !== 'undefined' && qrcodeContainer) {
+                qrcodeContainer.innerHTML = '';
+                new QRCode(qrcodeContainer, {
+                    text: mobileUrl,
+                    width: 150,
+                    height: 150,
+                    colorDark: '#000000',
+                    colorLight: '#ffffff',
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+            }
+        }
+        window.addEventListener('load', carregarLinksAjuda);
+    </script>
+</body>
+</html>
+
+

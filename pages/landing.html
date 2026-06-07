@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ComandaSmart - Sistema Gratuito de Gestão para Restaurantes</title>
+    <link rel="stylesheet" href="https://use.typekit.net/aab5ush.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+            color: #fff;
+            line-height: 1.6;
+        }
+
+        p {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        header {
+            background: #000;
+            padding: 20px 0;
+            border-bottom: 1px solid #ff6600;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #ff6600;
+            font-family: "sofia-pro-soft", sans-serif;
+            font-weight: 700;
+            font-style: normal;
+        }
+
+        .logo img {
+            width: 50px;
+            height: 50px;
+        }
+
+        h1, h2, h3 {
+            font-family: "sofia-pro-soft", sans-serif;
+            font-weight: 700;
+            font-style: normal;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            margin-left: 30px;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #ff6600;
+        }
+
+        .hero {
+            max-width: 100%;
+            margin: 0;
+            padding: 100px 20px;
+            text-align: center;
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('../images/pexels-photo-4959907.jpeg') center/cover no-repeat fixed;
+            position: relative;
+            width: 100vw;
+            margin-left: calc(-50vw + 50%);
+            min-height: 600px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero::before {
+            content: none;
+        }
+
+        .hero h1, .hero p, .hero .cta-buttons {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #ff6600, #ffaa33);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: #aaa;
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 60px;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+
+        .btn-primary {
+            background: #ff6600;
+            color: #000;
+        }
+
+        .btn-primary:hover {
+            background: #ffaa33;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 102, 0, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #ff6600;
+            border: 2px solid #ff6600;
+        }
+
+        .btn-secondary:hover {
+            background: #ff6600;
+            color: #000;
+        }
+
+        .features {
+            max-width: 1200px;
+            margin: 80px auto;
+            padding: 0 20px;
+        }
+
+        .features h2 {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 60px;
+            color: #ff6600;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, #161616 0%, #1a1a1a 100%);
+            padding: 30px;
+            border-radius: 10px;
+            border: 1px solid #333;
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            border-color: #ff6600;
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(255, 102, 0, 0.2);
+        }
+
+        .feature-card h3 {
+            color: #ff6600;
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        .feature-card p {
+            color: #bbb;
+        }
+
+        .about {
+            max-width: 1200px;
+            margin: 80px auto;
+            padding: 50px 20px;
+            background: linear-gradient(135deg, #161616 0%, #1a1a1a 100%);
+            border-radius: 15px;
+            border: 1px solid #333;
+        }
+
+        .about h2 {
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            color: #ff6600;
+        }
+
+        .about p {
+            font-size: 1.1rem;
+            color: #bbb;
+            margin-bottom: 20px;
+            line-height: 1.8;
+        }
+
+        .download-section {
+            max-width: 1200px;
+            margin: 80px auto;
+            padding: 50px 20px;
+            text-align: center;
+            background: linear-gradient(135deg, rgba(255, 102, 0, 0.1) 0%, rgba(255, 170, 51, 0.05) 100%);
+            border-radius: 15px;
+            border: 2px solid #ff6600;
+        }
+
+        .download-section h2 {
+            font-size: 2rem;
+            margin-bottom: 30px;
+            color: #ff6600;
+        }
+
+        .download-section p {
+            font-size: 1.1rem;
+            color: #bbb;
+            margin-bottom: 30px;
+        }
+
+        .tech-stack {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+
+        .tech-badge {
+            background: #1a1a1a;
+            padding: 8px 15px;
+            border-radius: 20px;
+            border: 1px solid #ff6600;
+            color: #ff6600;
+            font-size: 0.9rem;
+        }
+
+        footer {
+            background: #000;
+            border-top: 1px solid #ff6600;
+            padding: 40px 20px;
+            margin-top: 100px;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .footer-content p {
+            color: #888;
+            margin-bottom: 15px;
+        }
+
+        .footer-content a {
+            color: #ff6600;
+            text-decoration: none;
+        }
+
+        .footer-content a:hover {
+            text-decoration: underline;
+        }
+
+        .creator-info {
+            background: linear-gradient(135deg, #161616 0%, #1a1a1a 100%);
+            padding: 30px;
+            border-radius: 10px;
+            margin: 30px 0;
+            border-left: 4px solid #ff6600;
+        }
+
+        .creator-info h3 {
+            color: #ff6600;
+            margin-bottom: 10px;
+        }
+
+        .creator-info p {
+            color: #bbb;
+            margin-bottom: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+
+            nav {
+                display: none;
+            }
+
+            .about, .download-section {
+                padding: 30px 15px;
+            }
+        }
+
+        .highlight {
+            color: #ff6600;
+            font-weight: bold;
+        }
+
+        .github-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <img src="../images/Ativo 11@4x-8.png" alt="ComandaSmart">
+                <span>ComandaSmart</span>
+            </div>
+            <nav>
+                <a href="#features">Funcionalidades</a>
+                <a href="#about">Sobre</a>
+                <a href="#download">Download</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <h1>ComandaSmart</h1>
+        <p>Sistema de gestão <span class="highlight">gratuito e open-source</span> para restaurantes, bares e lanchonetes</p>
+        <div class="cta-buttons">
+            <a href="https://github.com/lucasmontanhini/ComandaSmart" class="btn btn-primary" target="_blank">Baixar Agora</a>
+            <a href="#features" class="btn btn-secondary">Conhecer Funcionalidades</a>
+        </div>
+    </section>
+
+    <!-- FEATURES SECTION -->
+    <section id="features" class="features">
+        <h2>Funcionalidades Principais</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <h3>Gestão de Pedidos</h3>
+                <p>Lançamento rápido de pedidos via interface intuitiva. Integração em tempo real entre todas as telas do sistema para máxima eficiência.</p>
+            </div>
+
+            <div class="feature-card">
+                <h3>Monitor de Cozinha</h3>
+                <p>Display dedicado para a cozinha com cards de pedidos organizados. Atualização automática e notificações visuais de novos pedidos.</p>
+            </div>
+
+            <div class="feature-card">
+                <h3>App Garçom Mobile</h3>
+                <p>Aplicação responsiva para celulares e tablets. Garçons lançam pedidos, entregam pratos e fecham contas direto do mobile sem sair da mesa.</p>
+            </div>
+
+            <div class="feature-card">
+                <h3>Sistema de Pagamentos</h3>
+                <p>Registro automático do meio de pagamento: Dinheiro, Crédito, Débito e PIX. Relatórios compilados com resumo financeiro por forma de pagamento.</p>
+            </div>
+
+            <div class="feature-card">
+                <h3>Histórico e Relatórios</h3>
+                <p>Geração de resumos em .txt com todas as informações do turno. Histórico completo de vendas, itens e pagamentos para análise e reconciliação.</p>
+            </div>
+
+            <div class="feature-card">
+                <h3>Segurança e Controle</h3>
+                <p>Sistema de autenticação com PIN para garçons e senha para administrador. Proteção de dados com servidores locais integrados ao Electron.</p>
+            </div>
+
+            <div class="feature-card">
+                <h3>QR Code de Acesso</h3>
+                <p>Geração automática de QR Code para fácil acesso do garçom. Facilita conexão na rede local sem necessidade de digitar IPs manualmente.</p>
+            </div>
+
+            <div class="feature-card">
+                <h3>Números Sequenciais</h3>
+                <p>IDs de pedidos começam em #001 e incrementam automaticamente. Reinicia a cada novo turno para melhor organização e rastreamento.</p>
+            </div>
+
+            <div class="feature-card">
+                <h3>Sincronização em Tempo Real</h3>
+                <p>Todos os dispositivos sincronizados via servidor local Express integrado. Alterações aparecem instantaneamente em toda a rede.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ABOUT SECTION -->
+    <section id="about" class="about">
+        <h2>Sobre o ComandaSmart</h2>
+        <p>
+            O <span class="highlight">ComandaSmart</span> é um sistema de gestão completo desenvolvido para atender às necessidades de restaurantes, bares e lanchonetes. 
+            Totalmente <span class="highlight">gratuito e open-source</span>, o software oferece todas as funcionalidades essenciais para gerenciar pedidos, 
+            controlar a cozinha e processar pagamentos de forma integrada e eficiente.
+        </p>
+        <p>
+            Diferentemente de sistemas pagos que cobram por funcionalidades básicas, o ComandaSmart coloca à disposição um conjunto completo de ferramentas 
+            para que você possa gerenciar seu estabelecimento sem custos recorrentes. O sistema funciona <span class="highlight">totalmente offline</span> 
+            na rede local, garantindo segurança dos dados e funcionamento independente de conexão com a internet.
+        </p>
+        <p>
+            Desenvolvido com tecnologias modernas como <span class="highlight">Electron, Node.js, Express e JavaScript vanilla</span>, o ComandaSmart oferece 
+            uma experiência rápida, responsiva e confiável. Compatível com Windows, e com potencial para expansão para outras plataformas.
+        </p>
+
+        <div class="creator-info">
+            <h3>Sobre o Desenvolvedor</h3>
+            <p><strong>Lucas Montanhini</strong></p>
+            <p>Estudante de <span class="highlight">Desenvolvimento de Software Multiplataforma</span> na <span class="highlight">FATEC - SP</span></p>
+            <p>Este projeto foi desenvolvido como trabalho acadêmico com foco em aplicações práticas e reais.</p>
+            <p>GitHub: <a href="https://github.com/lucasmontanhini" target="_blank">@lucasmontanhini</a></p>
+        </div>
+    </section>
+
+    <!-- DOWNLOAD SECTION -->
+    <section id="download" class="download-section">
+        <h2>Comece a Usar Agora</h2>
+        <p>O ComandaSmart é completamente gratuito e de código aberto. Faça o download, instale e comece a gerenciar seu estabelecimento hoje mesmo!</p>
+
+        <div class="tech-stack">
+            <div class="tech-badge">Electron</div>
+            <div class="tech-badge">Node.js</div>
+            <div class="tech-badge">Express</div>
+            <div class="tech-badge">JavaScript</div>
+            <div class="tech-badge">Windows</div>
+            <div class="tech-badge">Open Source</div>
+        </div>
+
+        <a href="https://github.com/lucasmontanhini/ComandaSmart" class="btn btn-primary" target="_blank">
+            Baixar no GitHub
+        </a>
+        <p style="margin-top: 20px; color: #888; font-size: 0.95rem;">
+            Acesse o repositório no GitHub para encontrar as instruções de instalação, documentação e suporte.
+        </p>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-content">
+            <p><strong>ComandaSmart</strong> - Sistema Gratuito de Gestão para Restaurantes</p>
+            <p>Projeto Open Source | Desenvolvido como trabalho acadêmico na FATEC - SP</p>
+            <p>
+                <a href="https://github.com/lucasmontanhini/ComandaSmart" target="_blank">GitHub</a> • 
+                <a href="https://github.com/lucasmontanhini" target="_blank">Desenvolvedor</a> •
+                <a href="mailto:lucasmontanhini@proton.me">lucasmontanhini@proton.me</a>
+            </p>
+            <p style="margin-top: 30px; border-top: 1px solid #333; padding-top: 20px; color: #666;">
+                © 2026 Lucas Montanhini. Este projeto é fornecido como está, sob licença de código aberto.
+            </p>
+        </div>
+    </footer>
+</body>
+</html>
+
+

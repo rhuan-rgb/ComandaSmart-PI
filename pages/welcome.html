@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bem-vindo ao ComandaSmart</title>
+    <style>
+        :root { --orange: #ff6600; --dark: #161616; --bg: #f8f9fa; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        
+        body { background-color: var(--bg); color: #333; overflow-x: hidden; }
+
+        /* HEADER */
+        header { 
+            padding: 20px 50px; background: #fff; border-bottom: 1px solid #ddd;
+            display: flex; justify-content: space-between; align-items: center;
+            position: sticky; top: 0; z-index: 100;
+        }
+        .logo { height: 40px; }
+        .btn-dash { 
+            background: var(--orange); color: #fff; padding: 12px 25px; 
+            text-decoration: none; border-radius: 8px; font-weight: bold;
+            transition: 0.3s; box-shadow: 0 4px 10px rgba(255, 102, 0, 0.2);
+        }
+        .btn-dash:hover { transform: translateY(-2px); filter: brightness(1.1); }
+
+        /* HERO */
+        .hero { padding: 60px 50px; display: flex; align-items: center; gap: 50px; max-width: 1200px; margin: 0 auto; }
+        .hero-text { flex: 1; }
+        .hero-text h1 { font-size: 3rem; color: var(--dark); line-height: 1.1; margin-bottom: 20px; }
+        .hero-text span { color: var(--orange); }
+        .hero-text p { font-size: 1.2rem; color: #666; margin-bottom: 30px; }
+
+        /* GRID DE CONFIGURAÇÃO */
+        .config-grid { 
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px; 
+            padding: 0 50px 60px; max-width: 1200px; margin: 0 auto;
+        }
+        .card { 
+            background: #fff; padding: 30px; border-radius: 20px; 
+            border: 1px solid #eee; transition: 0.3s;
+        }
+        .card:hover { box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .card h3 { color: var(--dark); margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .link-box { 
+            background: #f0f0f0; padding: 15px; border-radius: 10px; 
+            font-family: monospace; font-size: 1.1rem; color: var(--orange);
+            margin: 15px 0; border: 1px solid #ddd; word-break: break-all;
+        }
+        
+        /* AJUDA / FIREWALL */
+        .help-section { background: #eee; padding: 40px 50px; border-radius: 20px; margin-top: 20px; }
+        code { background: #000; color: #00ff00; padding: 15px; display: block; border-radius: 10px; font-size: 0.9rem; margin-top: 10px; }
+
+        .tag-info { background: #e3f2fd; color: #0d47a1; padding: 4px 10px; border-radius: 5px; font-size: 0.7rem; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <img src="../images/Ativo 7@4x-8.png" class="logo">
+        <a href="../index.html" class="btn-dash">IR PARA DASHBOARD →</a>
+    </header>
+
+    <main class="hero">
+        <div class="hero-text">
+            <h1>O Coração da sua <span>Lanchonete.</span></h1>
+            <p>Seu sistema local já está configurado e pronto para operar. Siga as instruções abaixo para conectar sua equipe.</p>
+        </div>
+        <img src="../images/Ativo 11@4x-8.png" style="width: 250px; opacity: 0.8;">
+    </main>
+
+    <div class="config-grid">
+        <!-- CONEXÃO MOBILE -->
+        <div class="card">
+            <h3>📱 Acesso dos Garçons <span class="tag-info">WI-FI</span></h3>
+            <p>Copie o link abaixo e abra no navegador do celular do garçom para registrar pedidos:</p>
+            <div id="link-mobile" class="link-box">Carregando IP...</div>
+            <p style="font-size: 0.8rem; color: #888;">Dica: No celular, selecione "Adicionar à tela inicial" para usar como um aplicativo.</p>
+        </div>
+
+        <!-- CONEXÃO COZINHA -->
+        <div class="card">
+            <h3>👨‍🍳 Monitor da Cozinha <span class="tag-info">TV / TABLET</span></h3>
+            <p>Abra este link em uma TV ou tablet fixo na cozinha para o monitor de preparo:</p>
+            <div id="link-kitchen" class="link-box">Carregando IP...</div>
+            <p style="font-size: 0.8rem; color: #888;">Este monitor se atualiza sozinho a cada novo pedido enviado.</p>
+        </div>
+
+        <!-- AJUDA TÉCNICA -->
+        <div class="card" style="grid-column: span 2;">
+            <h3>🛡️ Problemas de Conexão? (Ajuda)</h3>
+            <p>Se o celular não conseguir carregar as páginas, o Windows pode estar bloqueando a rede. Execute o comando abaixo no <b>PowerShell como Administrador</b> para liberar o sistema:</p>
+            <code>New-NetFirewallRule -DisplayName "ComandaSmart" -Direction Inbound -LocalPort 3000 -Protocol TCP -Action Allow</code>
+            <p style="margin-top: 15px; font-size: 0.8rem;"><b>Atenção:</b> Certifique-se de que o computador e os celulares estão conectados na mesma rede Wi-Fi.</p>
+        </div>
+    </div>
+
+    <script>
+    function carregarLinks() {
+        document.getElementById('link-mobile').innerText = 'mobile.html';
+        document.getElementById('link-kitchen').innerText = 'kitchen.html';
+    }
+
+    window.onload = carregarLinks;
+</script>
+</body>
+</html>
+
+

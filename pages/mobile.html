@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ComandaSmart - Garçom</title>
+    <link rel="stylesheet" href="../styles/style.css">
+    <style>
+        /* --- ESTILOS MASTER MOBILE --- */
+        :root { --primary-orange: #ff6600; --green-btn: #28a745; --red-badge: #ff0000; }
+        body { background: #000; color: #fff; margin: 0; padding-bottom: 90px; font-family: 'Segoe UI', sans-serif; overflow-x: hidden; }
+        
+        /* LOGIN OVERLAY */
+        #loginGarcom {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #0a0a0a; z-index: 100000; display: flex; 
+            flex-direction: column; align-items: center; justify-content: center; padding: 20px;
+        }
+
+        /* NAVEGAÇÃO INFERIOR */
+        .bottom-nav {
+            position: fixed; bottom: 0; left: 0; width: 100%; height: 75px;
+            background: #111; border-top: 1px solid #333;
+            display: flex; justify-content: space-around; align-items: center;
+            z-index: 99999;
+        }
+        .nav-item { color: #888; text-align: center; font-size: 11px; cursor: pointer; flex: 1; position: relative; }
+        .nav-item.active { color: var(--primary-orange); font-weight: bold; }
+        .nav-item span { font-size: 24px; display: block; margin-bottom: 2px; }
+
+        /* BADGE DE NOTIFICAÇÃO (BOLINHA) */
+        .badge {
+            position: absolute; top: -5px; right: 25%;
+            background: var(--red-badge); color: white; font-size: 10px;
+            width: 20px; height: 20px; border-radius: 50%;
+            display: none; align-items: center; justify-content: center;
+            border: 2px solid #111; font-weight: bold;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.7); }
+            70% { transform: scale(1.2); box-shadow: 0 0 0 10px rgba(255, 0, 0, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 0, 0, 0); }
+        }
+
+        /* CONTEÚDO ABAS */
+        .content-mobile { padding: 20px; display: none; }
+        .content-mobile.active { display: block; }
+
+        /* CARDS E LISTAS */
+        .card-entrega {
+            background: #111; border-radius: 12px; padding: 15px;
+            margin-bottom: 15px; border-left: 5px solid var(--primary-orange);
+            animation: slideIn 0.3s ease-out;
+        }
+        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .item-temp { display: flex; justify-content: space-between; margin-bottom: 10px; padding-bottom: 5px; border-bottom: 1px solid #222; }
+        
+        input, select { 
+            width: 100%; padding: 15px; background: #111; border: 1px solid #333; 
+            color: #fff; border-radius: 10px; margin-bottom: 15px; font-size: 16px; 
+        }
+    </style>
+</head>
+<body>
+
+    <!-- TELA DE LOGIN (PIN) -->
+    <div id="loginGarcom">
+        <img src="../images/Ativo 7@4x-8.png" style="width: 160px; margin-bottom: 40px;">
+        <h2 style="color: var(--primary-orange); margin-bottom: 5px;">ACESSO GARÇOM</h2>
+        <p style="color: #666; margin-bottom: 30px;">Identifique-se para começar o turno</p>
+        
+        <select id="selectGarcom"></select>
+        <input type="password" id="pinAcesso" pattern="\d*" inputmode="numeric" maxlength="4" placeholder="PIN">
+        
+        <button onclick="autenticarGarcom()" class="btn btn-submit" style="height: 60px; width: 200px;">ENTRAR</button>
+    </div>
+
+    <!-- ABA 1: LANÇAR PEDIDO -->
+    <div id="abaLancar" class="content-mobile active">
+        <header style="text-align: center; margin-bottom: 20px; padding-top: 10px;">
+            <img src="../images/Ativo 7@4x-8.png" style="width: 80px; margin-bottom: 10px; opacity: 0.9;">
+            <p id="msgBoasVindas" style="color: var(--primary-orange); font-weight: bold;"></p>
+            <h2 style="margin: 5px 0;">NOVO PEDIDO</h2>
+        </header>
+
+        <div class="form-mobile">
+            <label>Mesa</label>
+            <input type="number" id="mesa" placeholder="Número da Mesa" style="font-size: 24px; text-align: center;">
+
+            <label>Produto</label>
+            <div style="display: flex; gap: 10px;">
+                <select id="selectProduto" style="flex: 3; height: 55px;"></select>
+                <input type="number" id="qtd" value="1" min="1" style="flex: 1; text-align: center; height: 55px;">
+            </div>
+            <button type="button" id="btnAddMobile" class="btn btn-submit" style="height: 55px; font-size: 24px;">+</button>
+
+            <div id="listaTemporaria" style="margin-top:20px; background:#0a0a0a; padding:15px; border-radius:10px; border:1px dashed #333;">
+                <p style="color: #444; text-align: center; margin: 0;">Nenhum item adicionado</p>
+            </div>
+
+            <label style="margin-top:20px;">Observações</label>
+            <input type="text" id="obs" placeholder="Ex: Sem cebola, gelo e limão...">
+
+            <div style="background: #161616; padding: 15px; border-radius: 10px; margin: 20px 0; border: 1px solid var(--primary-orange); display: flex; justify-content: space-between; align-items: center;">
+                <span>TOTAL:</span>
+                <span id="totalComanda" style="font-size: 1.8rem; color: var(--primary-orange); font-weight: bold;">R$ 0,00</span>
+            </div>
+
+            <button onclick="finalizarPedidoMobile()" class="btn btn-submit" style="height: 70px; font-size: 18px;">ENVIAR PEDIDO</button>
+        </div>
+    </div>
+
+    <!-- ABA 2: PARA ENTREGAR -->
+    <div id="abaEntregar" class="content-mobile">
+        <header style="text-align: center; margin-bottom: 20px; padding-top: 10px;">
+            <img src="../images/Ativo 7@4x-8.png" style="width: 80px; margin-bottom: 10px; opacity: 0.9;">
+            <h2 style="color: var(--primary-orange);">PRONTO PARA ENTREGA</h2>
+            <p style="color: #666; font-size: 12px;">Retire na cozinha e confirme a entrega.</p>
+        </header>
+        <div id="listaProntos"></div>
+    </div>
+
+    <!-- ABA 3: PAGAMENTOS -->
+    <div id="abaPagamentos" class="content-mobile">
+        <header style="text-align: center; margin-bottom: 20px; padding-top: 10px;">
+            <img src="../images/Ativo 7@4x-8.png" style="width: 80px; margin-bottom: 10px; opacity: 0.9;">
+            <h2 style="color: var(--primary-orange);">FECHAR CONTA</h2>
+            <p style="color: #666; font-size: 12px;">Confirme os pagamentos da mesa.</p>
+        </header>
+        <div id="listaPagamentos"></div>
+    </div>
+
+    <!-- NAVEGAÇÃO -->
+    <nav class="bottom-nav">
+        <div class="nav-item active" id="btnNavLancar" onclick="trocarAba('lancar')">
+            <span>📝</span>Lançar
+        </div>
+        <div class="nav-item" id="btnNavEntregar" onclick="trocarAba('entregar')">
+            <div id="badgeEntregar" class="badge">0</div>
+            <span>🏃</span>Entregar
+        </div>
+        <div class="nav-item" id="btnNavPagamentos" onclick="trocarAba('pagamentos')">
+            <div id="badgePagamentos" class="badge">0</div>
+            <span>💳</span>Pagar
+        </div>
+    </nav>
+
+    <!-- SCRIPTS -->
+    <script src="../js/script.js"></script>
+    <script>
+        // --- CONFIGURAÇÕES E NOTIFICAÇÕES ---
+        let itensTemp = [];
+        let totalTemp = 0;
+        let totalProntosAnterior = 0;
+        const somNotificacao = new Audio('https://assets.mixkit.co/active_storage/sfx/2869/2869-preview.mp3');
+
+        // --- LOGIN E PIN ---
+        async function carregarGarconsMobile() {
+            const garcons = await getDB('colaboradores');
+            const sel = document.getElementById('selectGarcom');
+            sel.innerHTML = garcons.map(g => `<option value="${g.nome}">${g.nome}</option>`).join('');
+        }
+
+        async function autenticarGarcom() {
+            const nome = document.getElementById('selectGarcom').value;
+            const pin = document.getElementById('pinAcesso').value;
+            const garcons = await getDB('colaboradores');
+            const achei = garcons.find(g => g.nome === nome && g.pin === pin);
+
+            if (achei) {
+                // Desbloqueia o som no primeiro clique (Exigência dos navegadores)
+                somNotificacao.play().then(() => somNotificacao.pause());
+                
+                document.getElementById('loginGarcom').style.display = 'none';
+                sessionStorage.setItem('garcomAtivo', nome);
+                document.getElementById('msgBoasVindas').innerText = "👤 " + nome;
+                prepararCadastro(); // Carrega catálogo
+            } else {
+                alert("PIN INCORRETO!");
+            }
+        }
+
+        // --- SISTEMA DE ABAS ---
+        function trocarAba(aba) {
+            const l = document.getElementById('abaLancar');
+            const e = document.getElementById('abaEntregar');
+            const p = document.getElementById('abaPagamentos');
+            const bL = document.getElementById('btnNavLancar');
+            const bE = document.getElementById('btnNavEntregar');
+            const bP = document.getElementById('btnNavPagamentos');
+            const badge = document.getElementById('badgeEntregar');
+            const badgePag = document.getElementById('badgePagamentos');
+
+            if (aba === 'lancar') {
+                l.classList.add('active'); e.classList.remove('active'); p.classList.remove('active');
+                bL.classList.add('active'); bE.classList.remove('active'); bP.classList.remove('active');
+            } else if (aba === 'entregar') {
+                l.classList.remove('active'); e.classList.add('active'); p.classList.remove('active');
+                bL.classList.remove('active'); bE.classList.add('active'); bP.classList.remove('active');
+                badge.style.display = 'none'; // Esconde badge ao ler
+                renderizarProntosMobile();
+            } else if (aba === 'pagamentos') {
+                l.classList.remove('active'); e.classList.remove('active'); p.classList.add('active');
+                bL.classList.remove('active'); bE.classList.remove('active'); bP.classList.add('active');
+                badgePag.style.display = 'none'; // Esconde badge ao ler
+                renderizarPagamentosMobile();
+            }
+        }
+
+        // --- NOTIFICAÇÕES (SOM + VIBRAÇÃO + BADGE) ---
+        async function verificarNovosProntos() {
+            try {
+                const peds = await getDB('pedidos');
+                const prontos = peds.filter(p => p.status === 'pronto');
+                const emPagamento = peds.filter(p => p.status === 'pagamento');
+                const badge = document.getElementById('badgeEntregar');
+                const badgePag = document.getElementById('badgePagamentos');
+                const abaEntregarAtiva = document.getElementById('abaEntregar').classList.contains('active');
+                const abaPagamentosAtiva = document.getElementById('abaPagamentos').classList.contains('active');
+
+                // Se houver novos pedidos prontos
+                if (prontos.length > totalProntosAnterior) {
+                    if (!abaEntregarAtiva) {
+                        // Toca som e vibra
+                        somNotificacao.play().catch(() => {});
+                        if ("vibrate" in navigator) navigator.vibrate([200, 100, 200]);
+                        
+                        // Mostra a bolinha pulsante
+                        badge.innerText = prontos.length;
+                        badge.style.display = 'flex';
+                    }
+                }
+
+                if (abaEntregarAtiva) renderizarProntosMobile();
+                if (abaPagamentosAtiva) renderizarPagamentosMobile();
+                
+                // Atualiza badge de pagamentos
+                if (emPagamento.length > 0) {
+                    badgePag.innerText = emPagamento.length;
+                    badgePag.style.display = 'flex';
+                }
+                
+                totalProntosAnterior = prontos.length;
+
+            } catch (err) { console.error("Erro poll:", err); }
+        }
+
+        // --- LANÇAR PEDIDO ---
+        document.getElementById('btnAddMobile').onclick = async () => {
+            const sel = document.getElementById('selectProduto');
+            const cat = await getDB('catalogo');
+            const prod = cat.find(x => x.nome === sel.value);
+            const qtd = parseInt(document.getElementById('qtd').value);
+            if (!prod) return;
+
+            const valor = prod.preco * qtd;
+            totalTemp += valor;
+            itensTemp.push({ texto: `${qtd}x ${prod.nome}`, valor: valor });
+            atualizarUI();
+        };
+
+        function atualizarUI() {
+            const lista = document.getElementById('listaTemporaria');
+            if (itensTemp.length === 0) {
+                lista.innerHTML = '<p style="color: #444; text-align: center; margin: 0;">Nenhum item adicionado</p>';
+            } else {
+                lista.innerHTML = itensTemp.map((it, idx) => `
+                    <div class="item-temp">
+                        <span>${it.texto}</span>
+                        <span>R$ ${it.valor.toFixed(2)} <b onclick="removerItem(${idx})" style="color:red; margin-left:15px;">(X)</b></span>
+                    </div>`).join('');
+            }
+            document.getElementById('totalComanda').innerText = `R$ ${totalTemp.toFixed(2)}`;
+        }
+
+        function removerItem(idx) {
+            totalTemp -= itensTemp[idx].valor;
+            itensTemp.splice(idx, 1);
+            atualizarUI();
+        }
+
+        async function finalizarPedidoMobile() {
+
+            const status = await getDB('statusTurno');
+    if (!status || !status.aberto) {
+        alert("ERRO: O administrador acabou de fechar o turno. O pedido não pode ser enviado.");
+        location.reload(); // Força a tela de bloqueio
+        return;
+    }
+    const mesaInformada = document.getElementById('mesa').value.toString().trim();
+    if (!mesaInformada || itensTemp.length === 0) return alert("Verifique mesa e itens!");
+
+    // CONFIRMAÇÃO DO PEDIDO
+    const totalFormatado = `R$ ${totalTemp.toFixed(2)}`;
+    const itensTexto = itensTemp.map(i => `• ${i.texto} - ${(i.valor).toFixed(2)}`).join('\n');
+    const confirmacao = confirm(`📋 CONFIRMAR PEDIDO?\n\nMESA: ${mesaInformada}\n\n${itensTexto}\n\nTOTAL: ${totalFormatado}`);
+    
+    if (!confirmacao) return; // Usuário cancelou
+
+    const garcom = sessionStorage.getItem('garcomAtivo') || "Admin";
+    const peds = await getDB('pedidos');
+
+    // BUSCA MELHORADA: Mesma lógica do PC
+    // Só soma o pedido se ele ainda estiver em preparação (não pronto nem em pagamento).
+    const ex = peds.find(p => 
+        p.mesa.toString().trim() === mesaInformada && 
+        p.status === 'preparando'
+    );
+
+    if (ex) {
+        // SOMA NO PEDIDO EXISTENTE
+        ex.itens += '\n' + itensTemp.map(i => i.texto).join('\n');
+        // Força a soma matemática com parseFloat
+        ex.total = parseFloat(ex.total) + parseFloat(totalTemp);
+        ex.status = 'preparando'; // Garante que a cozinha veja o novo item
+        
+        // Adiciona o nome do garçom se for diferente do que abriu a mesa
+        if (!ex.garcom.includes(garcom)) ex.garcom += " / " + garcom;
+    } else {
+        // CRIA NOVO PEDIDO
+        peds.push({
+            id: Date.now(),
+            mesa: mesaInformada,
+            garcom: garcom,
+            total: totalTemp,
+            status: 'preparando',
+            itens: itensTemp.map(i => i.texto).join('\n'),
+            obs: document.getElementById('obs').value,
+            hora: new Date().toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'})
+        });
+    }
+
+    await saveDB('pedidos', peds);
+    alert("✓ PEDIDO ADICIONADO À MESA " + mesaInformada);
+    
+    // RESET DA TELA
+    itensTemp = []; totalTemp = 0;
+    document.getElementById('mesa').value = '';
+    document.getElementById('obs').value = '';
+    atualizarUI();
+}
+
+        // --- ENTREGAR PEDIDO ---
+        async function renderizarProntosMobile() {
+            const container = document.getElementById('listaProntos');
+            const peds = await getDB('pedidos');
+            const prontos = peds.filter(p => p.status === 'pronto');
+
+            if (prontos.length === 0) {
+                container.innerHTML = '<div style="text-align:center; margin-top:50px; color:#444;">Nenhum pedido para retirar.</div>';
+                return;
+            }
+
+            container.innerHTML = prontos.map(p => `
+                <div class="card-entrega">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                        <span style="font-size:1.6rem; font-weight:bold; color:var(--primary-orange);">MESA ${p.mesa}</span>
+                        <span style="color:#555;">#${p.id.toString().slice(-3)}</span>
+                    </div>
+                    <div style="color:#eee; margin-bottom:15px; white-space:pre-wrap; font-size:1.1rem;">${p.itens}</div>
+                    <button class="btn btn-green" style="height:60px; font-size:1.1rem;" onclick="marcarEntregue(${p.id})">ENTREGAR AGORA</button>
+                </div>`).join('');
+        }
+
+        async function marcarEntregue(id) {
+            await mudarStatus(id, 'pagamento');
+            renderizarProntosMobile();
+        }
+
+        // --- RENDERIZAR E FECHAR PAGAMENTOS (MOBILE) ---
+        async function renderizarPagamentosMobile() {
+            const container = document.getElementById('listaPagamentos');
+            const peds = await getDB('pedidos');
+            const emPagamento = peds.filter(p => p.status === 'pagamento');
+
+            if (emPagamento.length === 0) {
+                container.innerHTML = '<div style="text-align:center; margin-top:50px; color:#444;">Nenhuma conta aberta.</div>';
+                return;
+            }
+
+            container.innerHTML = emPagamento.map(p => `
+                <div class="card-entrega" style="border-left-color: var(--green-btn);">
+                    <div style="display:flex; justify-content:space-between; margin-bottom:10px; align-items:center;">
+                        <span style="font-size:1.6rem; font-weight:bold; color:var(--primary-orange);">MESA ${p.mesa}</span>
+                        <span style="color:#555;">#${p.id}</span>
+                    </div>
+                    <div style="color:#eee; margin-bottom:15px; white-space:pre-wrap; font-size:0.95rem;">${p.itens}</div>
+                    <div style="background:#161616; padding:12px; border-radius:8px; margin-bottom:15px; display:flex; justify-content:space-between; align-items:center; border:1px solid var(--green-btn);">
+                        <span style="color:#888;">TOTAL:</span>
+                        <span style="font-size:1.4rem; color:var(--primary-orange); font-weight:bold;">R$ ${parseFloat(p.total).toFixed(2)}</span>
+                    </div>
+                    <button class="btn" style="background:var(--green-btn); height:60px; font-size:1.1rem; width:100%; margin-bottom:8px;" onclick="confirmarPagamentoMobile('${p.id}', '${p.mesa}')">✓ CONFIRMAR PAGAMENTO</button>
+                </div>`).join('');
+        }
+
+        async function confirmarPagamentoMobile(id, mesa) {
+            if (confirm(`Confirmar pagamento da MESA ${mesa}?`)) {
+                const meioPagamento = await exibirModalMeioPagamentoMobile();
+                if (meioPagamento === null) return; // Usuário cancelou
+                
+                // Buscar dados do pedido
+                const peds = await getDB('pedidos');
+                const idx = peds.findIndex(p => p.id.toString() === id.toString());
+                if (idx === -1) return;
+                
+                const pedido = peds[idx];
+                
+                // Mostrar confirmação
+                const confirmado = await exibirConfirmacaoPagamentoMobile(pedido.mesa, pedido.total, meioPagamento);
+                if (!confirmado) return; // Usuário cancelou
+                
+                // Armazena o meio de pagamento no pedido
+                peds[idx].meioPagamento = meioPagamento;
+                await saveDB('pedidos', peds);
+                
+                // Marca como entregue
+                await mudarStatus(id, 'entregue');
+                alert("✓ Pagamento confirmado!");
+                renderizarPagamentosMobile();
+            }
+        }
+
+        // --- MODAL DE MEIO DE PAGAMENTO (MOBILE) ---
+        function exibirModalMeioPagamentoMobile() {
+            return new Promise((resolve) => {
+                const overlay = document.createElement('div');
+                overlay.style = "position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);display:flex;align-items:center;justify-content:center;z-index:99999;";
+                
+                const modal = document.createElement('div');
+                modal.style = "background:#161616;padding:20px;border-radius:15px;border:2px solid #ff6600;width:90%;max-width:380px;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,0.8);";
+                
+                modal.innerHTML = `
+                    <h3 style="color:#ff6600;margin-bottom:8px;font-family:sans-serif;font-size:1.2rem;">MEIO DE PAGAMENTO?</h3>
+                    <p style="color:#888;margin-bottom:20px;font-size:0.9rem;">Selecione o método:</p>
+                    <div style="display:flex;flex-direction:column;gap:10px;">
+                        <button style="background:#1a1a1a;border:2px solid #444;color:#fff;padding:14px;font-size:1rem;cursor:pointer;border-radius:8px;transition:all 0.2s;" onmouseover="this.style.borderColor='#ff6600';this.style.background='#2a2a2a';" onmouseout="this.style.borderColor='#444';this.style.background='#1a1a1a';" onclick="fecharModalPag('dinheiro')">💵 DINHEIRO</button>
+                        <button style="background:#1a1a1a;border:2px solid #444;color:#fff;padding:14px;font-size:1rem;cursor:pointer;border-radius:8px;transition:all 0.2s;" onmouseover="this.style.borderColor='#ff6600';this.style.background='#2a2a2a';" onmouseout="this.style.borderColor='#444';this.style.background='#1a1a1a';" onclick="fecharModalPag('credito')">💳 CRÉDITO</button>
+                        <button style="background:#1a1a1a;border:2px solid #444;color:#fff;padding:14px;font-size:1rem;cursor:pointer;border-radius:8px;transition:all 0.2s;" onmouseover="this.style.borderColor='#ff6600';this.style.background='#2a2a2a';" onmouseout="this.style.borderColor='#444';this.style.background='#1a1a1a';" onclick="fecharModalPag('debito')">🔳 DÉBITO</button>
+                        <button style="background:#1a1a1a;border:2px solid #444;color:#fff;padding:14px;font-size:1rem;cursor:pointer;border-radius:8px;transition:all 0.2s;" onmouseover="this.style.borderColor='#ff6600';this.style.background='#2a2a2a';" onmouseout="this.style.borderColor='#444';this.style.background='#1a1a1a';" onclick="fecharModalPag('pix')">📲 PIX</button>
+                        <button style="background:#444;padding:10px;font-size:0.95rem;cursor:pointer;border-radius:8px;border:none;color:#fff;" onclick="fecharModalPag(null)">CANCELAR</button>
+                    </div>
+                `;
+                
+                overlay.appendChild(modal);
+                document.body.appendChild(overlay);
+                
+                window.fecharModalPag = (valor) => {
+                    document.body.removeChild(overlay);
+                    resolve(valor);
+                };
+            });
+        }
+
+        // --- MODAL DE CONFIRMAÇÃO MOBILE ---
+        function exibirConfirmacaoPagamentoMobile(mesa, valor, meioPagamento) {
+            return new Promise((resolve) => {
+                const overlay = document.createElement('div');
+                overlay.style = "position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);display:flex;align-items:center;justify-content:center;z-index:10000;";
+                
+                const modal = document.createElement('div');
+                modal.style = "background:#161616;padding:20px;border-radius:15px;border:2px solid #28a745;width:90%;max-width:380px;text-align:center;box-shadow:0 10px 30px rgba(0,0,0,0.8);";
+                
+                const emojiMeio = {
+                    'dinheiro': '💵',
+                    'credito': '💳',
+                    'debito': '🔳',
+                    'pix': '📲'
+                };
+                
+                const textoMeio = {
+                    'dinheiro': 'DINHEIRO',
+                    'credito': 'CRÉDITO',
+                    'debito': 'DÉBITO',
+                    'pix': 'PIX'
+                };
+                
+                modal.innerHTML = `
+                    <h3 style="color:#28a745;margin-bottom:20px;font-size:1.1rem;">✓ CONFIRMAR PAGAMENTO</h3>
+                    <div style="background:#0a0a0a;padding:15px;border-radius:8px;margin-bottom:20px;border:1px solid #333;">
+                        <div style="margin-bottom:12px;font-size:0.9rem;color:#888;">
+                            <p style="margin:0;padding:6px 0;border-bottom:1px solid #222;">MESA</p>
+                            <p style="margin:0;padding:6px 0;font-size:1.2rem;color:#fff;font-weight:bold;">${mesa}</p>
+                        </div>
+                        <div style="margin-bottom:12px;font-size:0.9rem;color:#888;">
+                            <p style="margin:0;padding:6px 0;border-bottom:1px solid #222;">PAGAMENTO</p>
+                            <p style="margin:0;padding:6px 0;font-size:1rem;color:var(--primary-orange);">${emojiMeio[meioPagamento] || '❓'} ${textoMeio[meioPagamento] || 'DESCONHECIDO'}</p>
+                        </div>
+                        <div style="font-size:0.9rem;color:#888;">
+                            <p style="margin:0;padding:6px 0;border-bottom:1px solid #222;">VALOR</p>
+                            <p style="margin:0;padding:6px 0;font-size:1.2rem;color:#28a745;font-weight:bold;">R$ ${parseFloat(valor).toFixed(2)}</p>
+                        </div>
+                    </div>
+                    <div style="display:flex;gap:10px;">
+                        <button onclick="fecharConfirmacaoMob(false)" style="background:#444;flex:1;padding:12px;font-size:0.95rem;border:none;border-radius:8px;color:#fff;cursor:pointer;">CANCELAR</button>
+                        <button onclick="fecharConfirmacaoMob(true)" style="background:#28a745;flex:1;padding:12px;font-size:0.95rem;border:none;border-radius:8px;color:#fff;cursor:pointer;font-weight:bold;">✓ OK</button>
+                    </div>
+                `;
+                
+                overlay.appendChild(modal);
+                document.body.appendChild(overlay);
+                
+                window.fecharConfirmacaoMob = (confirmado) => {
+                    document.body.removeChild(overlay);
+                    resolve(confirmado);
+                };
+            });
+        }
+
+        // --- INICIALIZAÇÃO ---
+        window.onload = () => {
+            carregarGarconsMobile();
+        };
+
+        // --- TRAVA DE TURNO PARA O GARÇOM ---
+async function verificarStatusTurnoMobile() {
+    const status = await getDB('statusTurno');
+    const overlay = document.getElementById('loginGarcom');
+    
+    // Se o turno estiver fechado (ou não existir o arquivo ainda)
+    if (!status || status.aberto === false) {
+        overlay.innerHTML = `
+            <img src="../images/Ativo 7@4x-8.png" style="width: 160px; margin-bottom: 40px; opacity: 0.3;">
+            <h2 style="color: #444;">TURNO FECHADO</h2>
+            <p style="color: #333; text-align: center; padding: 0 40px;">
+                O sistema está temporariamente desativado pelo administrador. 
+                Aguarde a abertura do turno para lançar pedidos.
+            </p>
+            <button onclick="location.reload()" class="btn" style="background:#222; width:200px; margin-top:20px;">VERIFICAR NOVAMENTE</button>
+        `;
+        return false;
+    }
+    return true;
+}
+
+// Chame essa função assim que a página carregar
+window.addEventListener('load', async () => {
+    const turnoOk = await verificarStatusTurnoMobile();
+    if (turnoOk) {
+        carregarGarconsMobile();
+    }
+});
+    </script>
+</body>
+</html>
+
+
